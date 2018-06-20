@@ -1,0 +1,76 @@
+data:
+  dataset: {name: mnist, samples: 70000, type: public}
+  datasetLoadOption: full
+  kfold: 1
+  mapping:
+    Digit Label:
+      options: {}
+      port: OutputPort0
+      shape: ''
+      type: Categorical
+    Image:
+      options: {Augmentation: false, Height: 28, Normalization: false, Resize: false,
+        Scaling: 1, Width: 28, height_shift_range: 0, horizontal_flip: false, pretrained: None,
+        rotation_range: 0, shear_range: 0, vertical_flip: false, width_shift_range: 0}
+      port: InputPort0
+      shape: ''
+      type: Image
+  numPorts: 1
+  samples: {split: 4, test: 7000, training: 56000, validation: 7000}
+  shuffle: false
+model:
+  connections:
+  - {source: Dropout_2, target: Dense_3}
+  - {source: Dense_1, target: Dropout_1}
+  - {source: Flatten_1, target: Dense_1}
+  - {source: Dense_2, target: Dropout_2}
+  - {source: Dense_3, target: Output_1}
+  - {source: Dropout_1, target: Dense_2}
+  - {source: Input_1, target: Flatten_1}
+  layers:
+  - args: {}
+    class: Input
+    name: Input_1
+    x: 129
+    y: 81
+  - args: {}
+    class: Flatten
+    name: Flatten_1
+    x: 127
+    y: 231
+  - args: {activation: relu, output_dim: '512'}
+    class: Dense
+    name: Dense_1
+    x: 134
+    y: 375
+  - args: {p: 0.3}
+    class: Dropout
+    name: Dropout_1
+    x: 143
+    y: 513
+  - args: {activation: relu, output_dim: '512'}
+    class: Dense
+    name: Dense_2
+    x: 676
+    y: 78
+  - args: {p: 0.3}
+    class: Dropout
+    name: Dropout_2
+    x: 690
+    y: 220
+  - args: {activation: softmax, output_dim: '10'}
+    class: Dense
+    name: Dense_3
+    x: 700
+    y: 373
+  - args: {}
+    class: Output
+    name: Output_1
+    x: 710
+    y: 514
+params:
+  batch_size: 32
+  loss_func: categorical_crossentropy
+  num_epoch: 10
+  optimizer: {name: Adadelta}
+project: MNIST Handwritten Digits Classifier
